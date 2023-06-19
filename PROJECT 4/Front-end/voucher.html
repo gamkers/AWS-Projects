@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Voucher</title>
+   <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0cbaba;
+	  background-image: linear-gradient(315deg, #0cbaba 0%, #380036 74%);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+	
+	form {
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	  width: 270px;
+    }
+    h1 {
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      width: 200px;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+	  margin-left: 20px;
+	  padding: 20px;
+      border-radius: 20px;
+	  
+    }
+
+    table td, table th {
+      border: 1px solid #ddd;
+      padding: 8px;
+	  
+    }
+
+    table th {
+	  color: white;
+      background-color: #380036;
+      font-weight: bold;
+      text-align: left;
+	  border-radius: 5px;
+	  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	  backdrop-filter: blur(11.6px);
+	 -webkit-backdrop-filter: blur(11.6px);
+      font-weight: bold;
+    }
+	table tr {
+		  /* From https://css.glass */
+			background: rgba(255, 255, 255, 0.58);
+			border-radius: 16px;
+			box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+			backdrop-filter: blur(11.6px);
+			-webkit-backdrop-filter: blur(11.6px);
+			border: 1px solid rgba(255, 255, 255, 0.23);
+			font-weight: bold;
+
+    }
+
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script>
+    $(document).ready(function() {
+      $("#search").click(function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        // Get the form values
+        var voucherNo = $('#voucherNo').val();
+        var narration = $('#narration').val();
+        var date = $('#date').val();
+
+        // Create an object with the form data
+        var formData = {
+          voucherNo: voucherNo,
+          narration: narration,
+          date: date
+        };
+
+        // Send the form data to the API Gateway endpoint
+        $.ajax({
+          type: 'POST',
+          url: 'https://2t7ptn5c9g.execute-api.us-east-1.amazonaws.com/default/grp6-project-4-search-voucher',
+          data: JSON.stringify(formData),
+          success: function(data) {
+		  // Handle the successful response
+		  console.log(data);
+
+		  // Populate the table rows with search results
+		  $('#resultsTable').html(''); // Clear existing table rows
+
+		  data.forEach(voucher => {
+			var row = `
+			  
+			  <tr>
+				<td>${voucher.txn_id}</td>
+				<td>${voucher.voucher_code}</td>
+				<td>${voucher.txn_date}</td>
+				<td>${voucher.txn_type}</td>
+				<td>${voucher.acc_no}</td>
+				<td>${voucher.txn_amt}</td>
+				<td>${voucher.source_system_id}</td>
+				<td>${voucher.source_system_txn_id}</td>
+			  </tr>
+			`;
+			$('#resultsTable').append(row);
+		  });
+		},
+          error: function(error) {
+            // Handle errors
+            console.error(error);
+          }
+        });
+      });
+    });
+</script>
+</head>
+<body>
+  <h1>Search Voucher</h1>
+
+  <form style="background-color: #fff;">
+    <label for="voucherNo">Voucher No:</label>
+    <input type="text" id="voucherNo" name="voucherNo"><br>
+
+    <label for="narration">Narration:</label>
+    <input type="text" id="narration" name="narration"><br><br>
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date"><br><br>
+
+    <input id="search" type="submit" value="SEARCH">
+  </form>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Txn Id</th>
+        <th>Voucher No</th>
+        <th>Txn Date</th>
+        <th>Txn Type</th>
+        <th>Account No</th>
+        <th>Txn Amount</th>
+        <th>Source System Id</th>
+        <th>Source System Txn Id</th>
+
+      </tr>
+    </thead>
+    <tbody id="resultsTable"></tbody>
+  </table>
+  
+</body>
+</html>

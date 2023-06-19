@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>HTML Form</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="bootstrap.min.css" rel="stylesheet" />
+        <script src="bootstrap.bundle.min.js"></script>
+        <script src="jquery.min.js"></script>
+        <script>
+			
+           $(document).ready(function () {
+				//alert(111);
+				$("#shwBtn").click(function () {
+                    //alert(1);
+					
+					//Capture all form values in an array
+					values = jQuery("#my_form").serializeArray();
+                    /* Because serializeArray() ignores unset checkboxes and radio buttons: */
+                    values = values.concat(
+                        jQuery("#myform input[type=checkbox]:not(:checked)")
+                            .map(function () {
+                                return { name: this.name, value: false };
+                            }).get()
+                    );
+
+                    //formParamValues = JSON.stringify(values);
+					//alert(formParamValues);
+					
+					
+					
+					
+					// Add code for HTML-select explicitly
+					var carsValue = $('#cars').find(":selected").val();					
+					var carsItem={"name":"cars", "value":carsValue};					
+					values.push(carsItem);
+					
+					formParamValues = JSON.stringify(values);
+                    //alert(formParamValues);
+					//alert("sending by ajax")
+					
+					//===================================================
+					
+					$.ajax({
+						type: 'post',
+						url: "https://bgke6dxdf3.execute-api.us-east-1.amazonaws.com/default/kishan_html",
+						data: formParamValues,
+						xhrFields: {
+							withCredentials: false
+						},  
+						headers: {
+
+						}, 
+						success: function (data) {
+							alert('Success');
+							alert(data);
+							// your business logic
+						},  
+						error: function () {
+							//console.log('We are sorry but our servers are having an issue right now');
+						}
+					})
+					//===================================================
+					
+				});
+		   });
+
+            
+        </script>
+    </head>
+    <body>
+        <form action="#" name="my_form" id="my_form">
+            <p>First name: <input type="text" name="firstname" id="firstname" value="John" /></p>
+            <p>Password : <input type="password" id="pass" name="password" minlength="3" required /></p>
+            <p>
+                <br />
+                <br />
+            </p>
+
+            <h3>Which is your preferred OS?</h3>
+
+            <input type="radio" id="linux" name="os" value="Linux" />
+            <label for="linux">Linux</label><br />
+            <input type="radio" id="mac" name="os" value="Mac" />
+            <label for="mac">Mac</label><br />
+            <input type="radio" id="windows" name="os" value="Windows" />
+            <label for="windows">Windows</label>
+
+            <br />
+            <br />
+
+            <h3>Your favoured piza toppings?</h3>
+            <input type="checkbox" id="pep" name="topping1" value="Pepperoni" />
+            <label for="pep">Pepperoni</label><br />
+            <input type="checkbox" id="mushroom" name="topping2" value="Mushroom" />
+            <label for="mushroom">Mushroom</label><br />
+            <input type="checkbox" id="olives" name="topping3" value="Black olives" />
+            <label for="olives">Black olives</label><br />
+            <input type="checkbox" id="Sausage" name="topping4" value="Sausage" />
+            <label for="Sausage">Sausage</label><br />
+            <input type="checkbox" id="cheese" name="topping5" value="Extra cheese" />
+            <label for="cheese">Extra cheese</label>
+
+            <br />
+            <br />
+
+            <label for="journey-time">
+                <h3>Choose a time for your journey:</h3>
+            </label>
+            <input type="datetime-local" id="journey-time" name="journey-time" value="2021-12-10T19:30" min="2021-12-10T20:30" max="2021-12-20T00:00" />
+
+            <br />
+            <br />
+
+            <label for="cars">Choose a car:</label>
+            <select name="cars" id="cars" form="carform">
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="opel">Opel</option>
+                <option value="audi">Audi</option>
+            </select>
+
+            <br />
+            <br />
+
+            <input id="shwBtn" type="submit" value="Submit data" />
+        </form>
+    </body>
+</html>

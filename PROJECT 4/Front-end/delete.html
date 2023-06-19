@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Account Master</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0cbaba;
+	  background-image: linear-gradient(315deg, #0cbaba 0%, #380036 74%);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: white;
+      margin-bottom: 20px;
+      margin-right: 59px;
+    }
+
+	form {
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	  width: 270px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    select {
+      width: 250px;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    input[type="button"] {
+      background-color: #3778C2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    input[type="button"]:hover {
+      background-color: #4B9FE1;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 5px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#search").click(function (e)  {
+        event.preventDefault(); // Prevent form submission
+
+        // Get the form values
+        var accountNo = $('#accountNo').val();
+        var accountName = $('#accountName').val();
+        var acctType = $('#acctType').val();
+
+        // Create an object with the form data
+        var formData = {
+          accountNo: accountNo,
+          accountName: accountName,
+          acctType: acctType
+        };
+
+        // Send the form data to the API Gateway endpoint
+        $.ajax({
+          type: 'POST',
+          url: 'https://ssf7aoz0n3.execute-api.us-east-1.amazonaws.com/default/grp6-project-4-search',
+          data: JSON.stringify(formData),
+          success: function(data) {
+            // Handle the successful response
+            console.log(data);
+
+            // Display the account description in the form
+            $('#description').val(data.description);
+			$('#accountNo').val(data.acc_no);
+			$('#accountName').val(data.acc_name);
+			$('#acctType').val(data.acc_type);
+			
+			
+          },
+          error: function(error) {
+            // Handle errors
+			alert('Account Not Found');
+            resetForm();
+            console.error(error);
+          }
+        });
+      });
+	  $("#delete").click(function (e)  {
+        event.preventDefault(); // Prevent form submission
+
+        // Get the form values
+        var accountNo = $('#accountNo').val();
+        var accountName = $('#accountName').val();
+        var acctType = $('#acctType').val();
+
+        // Create an object with the form data
+        var formData = {
+          accountNo: accountNo,
+          accountName: accountName,
+          acctType: acctType
+        };
+
+        // Send the form data to the API Gateway endpoint
+        $.ajax({
+          type: 'POST',
+          url: 'https://wrjah4xs94.execute-api.us-east-1.amazonaws.com/default/grp6-project-4-delete',
+          data: JSON.stringify(formData),
+          success: function(data) {
+            // Handle the successful response
+            console.log(data);	
+            alert('Account Deleted successfully.');
+            resetForm();
+          },
+          error: function(error) {
+            alert('Account Not Found.');
+            resetForm();
+            console.error(error);
+          }
+        });
+      });
+    });
+	function resetForm() {
+      // Reset the form fields here
+      $('#accountNo').val('');
+      $('#accountName').val('');
+      $('#description').val('');
+      $('#acctType').val('');
+    }
+  </script>
+</head>
+<body>
+  <h1>Delete Account Master</h1>
+
+  <form style="background-color: #fff;">
+    <label for="accountNo">Account No:</label>
+    <input type="text" id="accountNo" name="accountNo" required><br>
+    <span class="error-message" id="accountNoError"></span><br>
+
+    <label for="accountName">Account Name:</label>
+    <input type="text" id="accountName" name="accountName"><br><br>
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description"><br><br>
+
+    <label for="acctType">Acct Type:</label>
+      <select id="acctType" name="acctType">
+        <option value="I">Income</option>
+        <option value="E">Expense</option>
+        <option value="A">Asset</option>
+        <option value="L">Liability</option>
+      </select><br><br>
+   
+
+   
+    <input id="search" type="submit" value="Search">
+	<input id="delete" type="submit" value="delete">
+  </form>
+</body>
+</html>

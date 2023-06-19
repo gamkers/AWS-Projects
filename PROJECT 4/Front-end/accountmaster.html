@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Account Master</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #f2f2f2, #e2e9f5);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+	  margin-right: 20px;
+    }
+
+    form {
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    select {
+      width: 200px;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Search Account Master</h1>
+
+  <form style="background-color: #fff; padding: 20px;">
+    <label for="accountNo">Account No:</label>
+    <input type="text" id="accountNo" name="accountNo"><br><br>
+
+    <label for="accountName">Account Name:</label>
+    <input type="text" id="accountName" name="accountName"><br><br>
+
+    <label for="acctType">Acct Type:</label>
+    <select id="acctType" name="acctType">
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </select><br><br>
+
+    <input type="submit" value="Search">
+  </form>
+
+</body>
+</html>

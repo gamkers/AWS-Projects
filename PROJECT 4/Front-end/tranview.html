@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ledger Balance Report</title>
+    <style>
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+            margin-right: 59px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0cbaba;
+            background-image: linear-gradient(315deg, #0cbaba 0%, #380036 74%);
+        }
+
+        /* Center the report form */
+        .report-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Style the table */
+        #balanceTable1 {
+            width: 400px;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        /* Style the table header */
+        #balanceTable1 th {
+            background-color: #f2f2f2;
+            padding: 8px;
+        }
+
+        /* Style the table cells */
+        #balanceTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-form">
+        <h1>Ledger Balance Report </br>Date: <span id="date"></span></h1>
+        
+        <table id="balanceTable1">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Account No</th>
+                    <th>Balance (RS)</th>
+                </tr>
+            </thead>
+            <tbody id="balanceTable">
+                <!-- Data rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Fetch data from the API Gateway endpoint
+            $.ajax({
+                type: 'GET',
+                url: 'https://9ncocfxjwa.execute-api.us-east-1.amazonaws.com/default/grp6-project-4-report',
+                success: function(data) {
+                    // Populate the table with the received data
+                    $('#balanceTable tbody').html(''); // Clear existing table rows
+                    data.forEach(function(account, index) {
+                        var row = '<tr>' +
+                            '<td>' + (index + 1) + '</td>' +
+                            '<td>' + account.accountNo + '</td>' +
+                            '<td>' + account.balance + '</td>' +
+                            '</tr>';
+                        $('#balanceTable').append(row);
+                    });
+                },
+                error: function(error) {
+                    // Handle errors
+                    console.error(error);
+                }
+            });
+
+            // Set the current date
+            var today = new Date().toLocaleDateString('en-US');
+            $('#date').text(today);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Account Management</title>
+  <style>
+    body {
+      background-color: #0cbaba;
+	  background-image: linear-gradient(315deg, #0cbaba 0%, #380036 74%);
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.32);
+      -webkit-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(6.9px);
+      -webkit-backdrop-filter: blur(6.9px);
+      border: 1px solid rgba(255, 255, 255, 0.41);
+      padding: 1em;
+      width: 97.5%;
+      z-index: 900;
+    }
+
+    .navbar ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar ul li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+
+    .navbar ul li a {
+      color: white;
+      text-decoration: none;
+	  padding: 8px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: black;
+      margin-bottom: 20px;
+      margin-right: 20px;
+    }
+
+    form {
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    input[type="text"],
+    select {
+      width: 240px;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('form').submit(function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        // Get the form values
+        var accountNo = $('#accountNo').val();
+        var accountName = $('#accountName').val();
+        var acctType = $('#acctType').val();
+
+        // Create an object with the form data
+        var formData = {
+          accountNo: accountNo,
+          accountName: accountName,
+          acctType: acctType
+        };
+
+        // Send the form data to the API Gateway endpoint
+        $.ajax({
+          type: 'POST',
+          url: 'https://ssf7aoz0n3.execute-api.us-east-1.amazonaws.com/default/grp6-project-4-search',
+          data: JSON.stringify(formData),
+          success: function(data) {
+            // Handle the successful response
+            console.log(data);
+
+            // Display the account description in the form
+            $('#accountDescription').val(data.description);
+			$('#accountNo').val(data.acc_no);
+			$('#accountName').val(data.acc_name);
+			$('#acctType').val(data.acc_type);
+			
+          },
+          error: function(error) {
+            alert('Account Not Found.');
+            console.error(error);
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="navbar">
+    <nav>
+      <ul>
+        <li><a href="ACMADD.html">Add Account</a></li>
+        <li><a href="delete.html">Delete Account</a></li>
+        <li><a href="update.html">Update Account</a></li>
+        <li><a href="voucher.html">Search Voucher</a></li>
+        <li><a href="transaction.html">Transaction</a></li>
+		<li><a href="tranview.html">Report</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container">
+    <form>
+      <h1>Account Master</h1>
+      <label for="accountNo">Account No:</label>
+      <input type="text" id="accountNo" name="accountNo"><br><br>
+
+      <label for="accountName">Account Name:</label>
+      <input type="text" id="accountName" name="accountName"><br><br>
+
+      <label for="acctType">Acct Type:</label>
+      <select id="acctType" name="acctType">
+        <option value="I">Income</option>
+        <option value="E">Expense</option>
+        <option value="A">Asset</option>
+        <option value="L">Liability</option>
+		
+      </select><br><br>
+
+      <label for="accountDescription">Account Description:</label>
+      <textarea id="accountDescription" name="accountDescription" readonly></textarea><br><br>
+
+      <input type="submit" value="Search">
+    </form>
+  </div>
+</body>
+</html>
