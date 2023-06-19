@@ -63,8 +63,8 @@ def send_message_to_q(message,queue_url):
     # Create SQS client
     #sqs_client = boto3.client('sqs')
     sqs_client = boto3.client('sqs',
-                             aws_access_key_id='AKIAWPK6QDBS4626DDXB',
-                             aws_secret_access_key='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',
+                             aws_access_key_id='',
+                             aws_secret_access_key='',
                              region_name='us-east-1'
                              )
     
